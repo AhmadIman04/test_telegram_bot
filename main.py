@@ -91,4 +91,4 @@ app.add_handler(CommandHandler("get_student", get_student_bot))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
 print("Bot is running...")
-app.run_polling()
+app.run_polling(drop_pending_updates=True)
