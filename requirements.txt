@@ -3,3 +3,5 @@ gspread
 pandas
 google-auth
 python-dotenv
+fastapi
+uvicorn
