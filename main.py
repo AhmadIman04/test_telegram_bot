@@ -44,6 +44,7 @@ df = pd.DataFrame(data)
 print("woi")
 
 def get_student(student_id: str):
+    df = pd.DataFrame(data)
     row = df[df["Student_ID"] == student_id]
     if len(row) == 0:
         return {"error": "No student found"}
