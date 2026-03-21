@@ -6,6 +6,9 @@ from google.oauth2.service_account import Credentials
 import os
 from dotenv import load_dotenv
 import json
+from keep_alive import keep_alive
+
+keep_alive()
 
 load_dotenv()
 
