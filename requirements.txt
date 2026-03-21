@@ -1,0 +1,5 @@
+python-telegram-bot
+gspread
+pandas
+google-auth
+python-dotenv
