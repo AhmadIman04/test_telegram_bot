@@ -16,8 +16,9 @@ keep_alive()
 
 load_dotenv()
 
-allowed_ids = os.getenv("ALLOWED_IDS", "")
-allowed_ids =[int(x) for x in allowed_ids.split(",") if x]  # convert string to list of ints
+allowed_groups = os.getenv("ALLOWED_GROUPS", "")
+# convert string to list of ints
+allowed_groups =[int(x) for x in allowed_groups.split(",") if x]
 
 g_sheet_url = os.getenv("g_sheet_link")
 telegram_token = os.getenv("telegram_token")
@@ -94,8 +95,8 @@ def get_medicine(medicine_name: str, panel_name: str, df: pd.DataFrame = None):
 
 # 1. Start command - Show buttons
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    if user_id not in allowed_ids:
+    chat_id = update.effective_chat.id
+    if chat_id not in allowed_groups:
         await update.message.reply_text("⛔ You are not authorized to use this bot.")
         return 
 
@@ -126,8 +127,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # 2. Button clicked - Save panel, ask for medicine
 async def panel_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    if user_id not in allowed_ids:
+    chat_id = update.effective_chat.id
+    if chat_id not in allowed_groups:
         await update.message.reply_text("⛔ You are not authorized to use this bot.")
         return 
     
@@ -153,8 +154,8 @@ async def panel_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # 3. Search for available medicine (When staff types partial text)
 async def search_medicine(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    if user_id not in allowed_ids:
+    chat_id = update.effective_chat.id
+    if chat_id not in allowed_groups:
         await update.message.reply_text("⛔ You are not authorized to use this bot.")
         return 
     
@@ -209,10 +210,10 @@ async def search_medicine(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # 4. Medicine button selected from suggestions
 async def item_selected(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    if user_id not in allowed_ids:
+    chat_id = update.effective_chat.id
+    if chat_id not in allowed_groups:
         await update.message.reply_text("⛔ You are not authorized to use this bot.")
-        return 
+        return  
     
     query = update.callback_query
     await query.answer()
@@ -253,7 +254,7 @@ async def send_coverage_details(message_obj, context, item_name, panel_name, df=
         if pd.isna(price) or str(price).strip() == "" or str(price).strip().upper() == "NAN":
             reply += "⚠️ Status: *Not covered*\n\n_Sila rujuk panel admin jika perlu pengesahan lanjut._"
         else:
-            reply += f"✅ Coverage: *{price}*"
+            reply += f"✅ Coverage (RM): *{price}*"
             
             # Check limits if applicable
             if "limit" in med_data:
@@ -280,8 +281,8 @@ async def send_coverage_details(message_obj, context, item_name, panel_name, df=
 
 # Fallback command to cancel
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    if user_id not in allowed_ids:
+    chat_id = update.effective_chat.id
+    if chat_id not in allowed_groups:
         await update.message.reply_text("⛔ You are not authorized to use this bot.")
         return 
     await update.message.reply_text("🛑 Sesi dibatalkan. Taip /start untuk mula semula.")
